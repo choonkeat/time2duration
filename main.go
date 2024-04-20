@@ -75,18 +75,28 @@ func formatDuration(d time.Duration) string {
 
 	var result string
 	if h > 0 {
-		result = fmt.Sprintf("% 3dh", h)
+		result = fmt.Sprintf("%3dh", h)
+	} else {
+		result += "    " // 4 spaces for hour
 	}
 	if m > 0 || h > 0 {
-		result += fmt.Sprintf("% 2dm", m)
+		result += fmt.Sprintf("%3dm", m)
+	} else {
+		result += "    " // 4 spaces for minute
 	}
 	if s > 0 || m > 0 || h > 0 {
-		result += fmt.Sprintf("% 2ds", s)
+		result += fmt.Sprintf("%3ds", s)
+	} else {
+		result += "    " // 4 spaces for second
 	}
-	result += fmt.Sprintf("% 3dms", ms)
-	result += fmt.Sprintf("% 6dns", ns)
+	if ms > 0 || s > 0 || m > 0 || h > 0 {
+		result += fmt.Sprintf("%4dms", ms)
+	} else {
+		result += "      " // 6 spaces for ms if less than 1ms
+	}
+	result += fmt.Sprintf("%7dns", ns)
 
-	return fmt.Sprintf("%29s", result) // Align right with padding for alignment
+	return fmt.Sprintf("%-27s", result) // Ensure the total length is 29 characters
 }
 
 // getTimeFromLine attempts to extract and parse the timestamp from the line based on provided flags.
